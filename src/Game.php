@@ -13,19 +13,14 @@ class Game
     {
         $score = 0;
 
-        $isSpare = false;
-        $isStrike = false;
         foreach ($this->frames as $i => $frame) {
             $score += $frame->getScore();
 
-            if ($isSpare) {
-                $isSpare = false;
-
+            if (isset($this->frames[$i-1]) && $this->frames[$i-1]->isSpare()) {
                 $score += $frame->firstBallKnockedPins();
             }
 
-            if ($isStrike) {
-                $isStrike = false;
+            if (isset($this->frames[$i-1]) && $this->frames[$i-1]->isStrike()) {
                 $score += $frame->getScore();
 
                 if ($i < 8) {
@@ -33,14 +28,6 @@ class Game
                         $score += $this->frames[$i+1]->firstBallKnockedPins();
                     }
                 }
-            }
-
-            if ($frame->isSpare()) {
-                $isSpare = true;
-            }
-
-            if ($frame->isStrike()) {
-                $isStrike = true;
             }
         }
 
