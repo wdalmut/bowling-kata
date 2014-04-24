@@ -4,6 +4,11 @@ class Game
 {
     private $frames;
 
+    public function __construct()
+    {
+        $this->frames = array();
+    }
+
     public function addFrame(Frame $frame)
     {
         $this->frames[] = $frame;
@@ -16,14 +21,14 @@ class Game
         foreach ($this->frames as $i => $frame) {
             $score += $frame->getScore();
 
-            if (isset($this->frames[$i-1]) && $this->frames[$i-1]->isSpare()) {
+            if ($this->previousFrameIsASpare($i)) {
                 $score += $frame->firstBallKnockedPins();
             }
 
-            if (isset($this->frames[$i-1]) && $this->frames[$i-1]->isStrike()) {
+            if ($this->previousFrameIsAStrike($i)) {
                 $score += $frame->getScore();
 
-                if ($i < 8) {
+                if ($this->isNotTheLastFrame($i)) {
                     if ($frame->isStrike()) {
                         $score += $this->frames[$i+1]->firstBallKnockedPins();
                     }
@@ -32,5 +37,20 @@ class Game
         }
 
         return $score;
+    }
+
+    private function isNotTheLastFrame($i)
+    {
+        return ($i < 8);
+    }
+
+    private function previousFrameIsASpare($i)
+    {
+        return isset($this->frames[$i-1]) && $this->frames[$i-1]->isSpare();
+    }
+
+    private function previousFrameIsAStrike($i)
+    {
+        return isset($this->frames[$i-1]) && $this->frames[$i-1]->isStrike();
     }
 }

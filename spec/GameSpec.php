@@ -9,6 +9,11 @@ use \Frame;
 
 class GameSpec extends ObjectBehavior
 {
+    function let()
+    {
+        $this->beConstructedWith(new \SplDoublyLinkedList());
+    }
+
     function it_is_initializable()
     {
         $this->shouldHaveType('Game');
